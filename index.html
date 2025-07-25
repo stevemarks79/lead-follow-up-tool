@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,267 +10,264 @@
             padding: 0;
             box-sizing: border-box;
         }
-
-```
-    body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
-        min-height: 100vh;
-        padding: 20px;
-    }
-    
-    .container {
-        max-width: 800px;
-        margin: 0 auto;
-        background: white;
-        border-radius: 20px;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        overflow: hidden;
-    }
-    
-    .header {
-        background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-        color: white;
-        padding: 30px;
-        text-align: center;
-        position: relative;
-    }
-    
-    .logo {
-        position: absolute;
-        top: 20px;
-        left: 30px;
-        height: 40px;
-    }
-    
-    .header h1 {
-        font-size: 2.2em;
-        margin-bottom: 10px;
-        font-weight: 700;
-        margin-left: 60px;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    }
-    
-    .header p {
-        font-size: 1.1em;
-        opacity: 0.9;
-        margin-left: 60px;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    }
-    
-    @media (max-width: 768px) {
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
         .logo {
-            position: static;
-            display: block;
-            margin: 0 auto 20px auto;
-            height: 35px;
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            height: 40px;
         }
         
         .header h1 {
-            margin-left: 0;
-            font-size: 1.8em;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 700;
+            margin-left: 60px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
         .header p {
-            margin-left: 0;
-            font-size: 1em;
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-left: 60px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
-    }
-    
-    .upload-section {
-        padding: 40px;
-        text-align: center;
-        border-bottom: 1px solid #eee;
-    }
-    
-    .upload-area {
-        border: 3px dashed #4fd1c7;
-        border-radius: 15px;
-        padding: 40px;
-        background: #f0fdfc;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .upload-area:hover {
-        border-color: #38b2ac;
-        background: #e6fffa;
-        transform: translateY(-2px);
-    }
-    
-    .upload-area.dragover {
-        border-color: #38b2ac;
-        background: #e6fffa;
-        transform: scale(1.02);
-    }
-    
-    .upload-icon {
-        font-size: 3em;
-        color: #4fd1c7;
-        margin-bottom: 15px;
-    }
-    
-    .upload-text {
-        font-size: 1.2em;
-        color: #2c3e50;
-        margin-bottom: 10px;
-    }
-    
-    .upload-subtext {
-        color: #7f8c8d;
-        font-size: 0.9em;
-    }
-    
-    #fileInput {
-        display: none;
-    }
-    
-    .preview-section {
-        padding: 30px;
-        display: none;
-    }
-    
-    .image-preview {
-        max-width: 100%;
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        margin-bottom: 20px;
-    }
-    
-    .analyze-btn {
-        background: linear-gradient(135deg, #4fd1c7 0%, #38b2ac 100%);
-        color: white;
-        border: none;
-        padding: 15px 30px;
-        border-radius: 10px;
-        font-size: 1.1em;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        width: 100%;
-        margin-top: 15px;
-    }
-    
-    .analyze-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(79, 209, 199, 0.3);
-    }
-    
-    .analyze-btn:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-        transform: none;
-    }
-    
-    .results-section {
-        padding: 30px;
-        background: #f8f9fa;
-        display: none;
-    }
-    
-    .analysis-card {
-        background: white;
-        border-radius: 15px;
-        padding: 25px;
-        margin-bottom: 20px;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-        border-left: 5px solid #4fd1c7;
-    }
-    
-    .analysis-title {
-        font-size: 1.3em;
-        color: #2c3e50;
-        margin-bottom: 15px;
-        font-weight: 600;
-    }
-    
-    .recommendation {
-        background: #e8f5e8;
-        border: 1px solid #4caf50;
-        border-radius: 10px;
-        padding: 20px;
-        margin: 15px 0;
-    }
-    
-    .recommendation-type {
-        font-weight: 600;
-        color: #2e7d32;
-        margin-bottom: 10px;
-        text-transform: uppercase;
-        font-size: 0.9em;
-    }
-    
-    .recommendation-text {
-        color: #1b5e20;
-        line-height: 1.6;
-        margin-bottom: 10px;
-    }
-    
-    .script-box {
-        background: #f1f3f4;
-        border-radius: 8px;
-        padding: 15px;
-        font-family: 'Courier New', monospace;
-        border-left: 4px solid #4fd1c7;
-        margin-top: 10px;
-    }
-    
-    .copy-btn {
-        background: #4fd1c7;
-        color: white;
-        border: none;
-        padding: 8px 15px;
-        border-radius: 5px;
-        font-size: 0.9em;
-        cursor: pointer;
-        margin-top: 10px;
-        transition: background 0.3s ease;
-    }
-    
-    .copy-btn:hover {
-        background: #38b2ac;
-    }
-    
-    .loading {
-        text-align: center;
-        padding: 30px;
-        color: #4fd1c7;
-    }
-    
-    .spinner {
-        border: 3px solid #f3f3f3;
-        border-top: 3px solid #4fd1c7;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        animation: spin 1s linear infinite;
-        margin: 0 auto 15px;
-    }
-    
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-    
-    .reset-btn {
-        background: #6c757d;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 8px;
-        cursor: pointer;
-        margin-top: 20px;
-        transition: background 0.3s ease;
-    }
-    
-    .reset-btn:hover {
-        background: #5a6268;
-    }
-</style>
-```
-
+        
+        @media (max-width: 768px) {
+            .logo {
+                position: static;
+                display: block;
+                margin: 0 auto 20px auto;
+                height: 35px;
+            }
+            
+            .header h1 {
+                margin-left: 0;
+                font-size: 1.8em;
+            }
+            
+            .header p {
+                margin-left: 0;
+                font-size: 1em;
+            }
+        }
+        
+        .upload-section {
+            padding: 40px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .upload-area {
+            border: 3px dashed #4fd1c7;
+            border-radius: 15px;
+            padding: 40px;
+            background: #f0fdfc;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .upload-area:hover {
+            border-color: #38b2ac;
+            background: #e6fffa;
+            transform: translateY(-2px);
+        }
+        
+        .upload-area.dragover {
+            border-color: #38b2ac;
+            background: #e6fffa;
+            transform: scale(1.02);
+        }
+        
+        .upload-icon {
+            font-size: 3em;
+            color: #4fd1c7;
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            font-size: 1.2em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .upload-subtext {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        
+        .preview-section {
+            padding: 30px;
+            display: none;
+        }
+        
+        .image-preview {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .analyze-btn {
+            background: linear-gradient(135deg, #4fd1c7 0%, #38b2ac 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 15px;
+        }
+        
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 209, 199, 0.3);
+        }
+        
+        .analyze-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .results-section {
+            padding: 30px;
+            background: #f8f9fa;
+            display: none;
+        }
+        
+        .analysis-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 5px solid #4fd1c7;
+        }
+        
+        .analysis-title {
+            font-size: 1.3em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .recommendation {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .recommendation-type {
+            font-weight: 600;
+            color: #2e7d32;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-size: 0.9em;
+        }
+        
+        .recommendation-text {
+            color: #1b5e20;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .script-box {
+            background: #f1f3f4;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            border-left: 4px solid #4fd1c7;
+            margin-top: 10px;
+        }
+        
+        .copy-btn {
+            background: #4fd1c7;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            background: #38b2ac;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #4fd1c7;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4fd1c7;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .reset-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+        }
+        
+        .reset-btn:hover {
+            background: #5a6268;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -280,392 +276,387 @@
             <h1>Lead Follow-up Analyzer</h1>
             <p>Upload a screenshot of your text conversation to get personalized follow-up recommendations</p>
         </div>
-
-```
-    <div class="upload-section" id="uploadSection">
-        <div class="upload-area" id="uploadArea">
-            <div class="upload-icon">📷</div>
-            <div class="upload-text">Drop your screenshot here, paste from clipboard (Ctrl+V), or click to browse</div>
-            <div class="upload-subtext">Supports PNG, JPG, JPEG files or paste directly from snipping tool</div>
+        
+        <div class="upload-section" id="uploadSection">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📷</div>
+                <div class="upload-text">Drop your screenshot here, paste from clipboard (Ctrl+V), or click to browse</div>
+                <div class="upload-subtext">Supports PNG, JPG, JPEG files or paste directly from snipping tool</div>
+            </div>
+            <input type="file" id="fileInput" accept="image/*">
         </div>
-        <input type="file" id="fileInput" accept="image/*">
+        
+        <div class="preview-section" id="previewSection">
+            <img id="imagePreview" class="image-preview" alt="Screenshot preview">
+            <button class="analyze-btn" id="analyzeBtn">Analyze Conversation & Get Recommendations</button>
+            <button class="reset-btn" id="resetBtn">Upload Different Screenshot</button>
+        </div>
+        
+        <div class="loading" id="loadingSection" style="display: none;">
+            <div class="spinner"></div>
+            <p>Analyzing conversation and generating recommendations...</p>
+        </div>
+        
+        <div class="results-section" id="resultsSection">
+            <div id="analysisResults"></div>
+            <button class="reset-btn" id="resetBtn2">Analyze Another Conversation</button>
+        </div>
     </div>
-    
-    <div class="preview-section" id="previewSection">
-        <img id="imagePreview" class="image-preview" alt="Screenshot preview">
-        <button class="analyze-btn" id="analyzeBtn">Analyze Conversation & Get Recommendations</button>
-        <button class="reset-btn" id="resetBtn">Upload Different Screenshot</button>
-    </div>
-    
-    <div class="loading" id="loadingSection" style="display: none;">
-        <div class="spinner"></div>
-        <p>Analyzing conversation and generating recommendations...</p>
-    </div>
-    
-    <div class="results-section" id="resultsSection">
-        <div id="analysisResults"></div>
-        <button class="reset-btn" id="resetBtn2">Analyze Another Conversation</button>
-    </div>
-</div>
 
-<script>
-    const uploadArea = document.getElementById('uploadArea');
-    const fileInput = document.getElementById('fileInput');
-    const previewSection = document.getElementById('previewSection');
-    const uploadSection = document.getElementById('uploadSection');
-    const imagePreview = document.getElementById('imagePreview');
-    const analyzeBtn = document.getElementById('analyzeBtn');
-    const loadingSection = document.getElementById('loadingSection');
-    const resultsSection = document.getElementById('resultsSection');
-    const resetBtn = document.getElementById('resetBtn');
-    const resetBtn2 = document.getElementById('resetBtn2');
-    
-    let currentAnalysis = null;
-    let selectedFile = null;
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const previewSection = document.getElementById('previewSection');
+        const uploadSection = document.getElementById('uploadSection');
+        const imagePreview = document.getElementById('imagePreview');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const loadingSection = document.getElementById('loadingSection');
+        const resultsSection = document.getElementById('resultsSection');
+        const resetBtn = document.getElementById('resetBtn');
+        const resetBtn2 = document.getElementById('resetBtn2');
+        
+        let currentAnalysis = null;
+        let selectedFile = null;
 
-    // File upload handlers
-    uploadArea.addEventListener('click', () => fileInput.click());
-    uploadArea.addEventListener('dragover', handleDragOver);
-    uploadArea.addEventListener('drop', handleDrop);
-    uploadArea.addEventListener('dragenter', () => uploadArea.classList.add('dragover'));
-    uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
-    fileInput.addEventListener('change', handleFileSelect);
-    
-    // Add paste support for screenshots
-    document.addEventListener('paste', handlePaste);
-    
-    function handlePaste(e) {
-        try {
-            const items = e.clipboardData.items;
-            for (let item of items) {
-                if (item.type.indexOf('image') !== -1) {
-                    const file = item.getAsFile();
-                    if (file) {
-                        handleFile(file);
-                        e.preventDefault();
-                        break;
+        // File upload handlers
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', handleDragOver);
+        uploadArea.addEventListener('drop', handleDrop);
+        uploadArea.addEventListener('dragenter', () => uploadArea.classList.add('dragover'));
+        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+        fileInput.addEventListener('change', handleFileSelect);
+        
+        // Add paste support for screenshots
+        document.addEventListener('paste', handlePaste);
+        
+        function handlePaste(e) {
+            try {
+                const items = e.clipboardData.items;
+                for (let item of items) {
+                    if (item.type.indexOf('image') !== -1) {
+                        const file = item.getAsFile();
+                        if (file) {
+                            handleFile(file);
+                            e.preventDefault();
+                            break;
+                        }
                     }
                 }
+            } catch (error) {
+                console.log('Paste not supported, use file upload instead');
             }
-        } catch (error) {
-            console.log('Paste not supported, use file upload instead');
-        }
-    }
-    
-    function handleDragOver(e) {
-        e.preventDefault();
-    }
-    
-    function handleDrop(e) {
-        e.preventDefault();
-        uploadArea.classList.remove('dragover');
-        const files = e.dataTransfer.files;
-        if (files.length > 0) {
-            handleFile(files[0]);
-        }
-    }
-    
-    function handleFileSelect(e) {
-        const file = e.target.files[0];
-        if (file) {
-            handleFile(file);
-        }
-    }
-    
-    function handleFile(file) {
-        if (!file.type.startsWith('image/')) {
-            alert('Please select an image file.');
-            return;
         }
         
-        selectedFile = file;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            imagePreview.src = e.target.result;
-            uploadSection.style.display = 'none';
-            previewSection.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-    }
-
-    // Analysis function
-    analyzeBtn.addEventListener('click', analyzeConversation);
-    
-    async function analyzeConversation() {
-        if (!selectedFile) return;
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
         
-        previewSection.style.display = 'none';
-        loadingSection.style.display = 'block';
+        function handleDrop(e) {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        }
         
-        try {
-            // Convert image to base64
-            const base64 = await fileToBase64(selectedFile);
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        }
+        
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image file.');
+                return;
+            }
             
-            // Retry logic for rate limiting
-            let retryCount = 0;
-            const maxRetries = 3;
-            let response;
-            
-            while (retryCount < maxRetries) {
-                try {
-                    // Call our Netlify function instead of Claude API directly
-                    response = await fetch("/.netlify/functions/analyze", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                            image: base64,
-                            mediaType: selectedFile.type
-                        })
-                    });
+            selectedFile = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result;
+                uploadSection.style.display = 'none';
+                previewSection.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
 
-                    if (response.ok) {
-                        break; // Success, exit retry loop
-                    } else if (response.status === 529) {
-                        retryCount++;
-                        if (retryCount < maxRetries) {
-                            // Wait before retrying (exponential backoff)
+        // Analysis function
+        analyzeBtn.addEventListener('click', analyzeConversation);
+        
+        async function analyzeConversation() {
+            if (!selectedFile) return;
+            
+            previewSection.style.display = 'none';
+            loadingSection.style.display = 'block';
+            
+            try {
+                // Convert image to base64
+                const base64 = await fileToBase64(selectedFile);
+                
+                // Retry logic for rate limiting
+                let retryCount = 0;
+                const maxRetries = 3;
+                let response;
+                
+                while (retryCount < maxRetries) {
+                    try {
+                        // Call our Netlify function instead of Claude API directly
+                        response = await fetch("/.netlify/functions/analyze", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                image: base64,
+                                mediaType: selectedFile.type
+                            })
+                        });
+
+                        if (response.ok) {
+                            break; // Success, exit retry loop
+                        } else if (response.status === 529) {
+                            retryCount++;
+                            if (retryCount < maxRetries) {
+                                // Wait before retrying (exponential backoff)
+                                const waitTime = Math.pow(2, retryCount) * 1000;
+                                loadingSection.innerHTML = `
+                                    <div class="spinner"></div>
+                                    <p>API is busy, retrying in ${waitTime/1000} seconds... (Attempt ${retryCount + 1}/${maxRetries})</p>
+                                `;
+                                await new Promise(resolve => setTimeout(resolve, waitTime));
+                            } else {
+                                throw new Error('API is currently overloaded. Please try again in a few minutes.');
+                            }
+                        } else {
+                            throw new Error(`Request failed: ${response.status}`);
+                        }
+                    } catch (fetchError) {
+                        if (retryCount < maxRetries - 1) {
+                            retryCount++;
                             const waitTime = Math.pow(2, retryCount) * 1000;
                             loadingSection.innerHTML = `
                                 <div class="spinner"></div>
-                                <p>API is busy, retrying in ${waitTime/1000} seconds... (Attempt ${retryCount + 1}/${maxRetries})</p>
+                                <p>Connection issue, retrying in ${waitTime/1000} seconds... (Attempt ${retryCount + 1}/${maxRetries})</p>
                             `;
                             await new Promise(resolve => setTimeout(resolve, waitTime));
                         } else {
-                            throw new Error('API is currently overloaded. Please try again in a few minutes.');
+                            throw fetchError;
                         }
-                    } else {
-                        throw new Error(`Request failed: ${response.status}`);
-                    }
-                } catch (fetchError) {
-                    if (retryCount < maxRetries - 1) {
-                        retryCount++;
-                        const waitTime = Math.pow(2, retryCount) * 1000;
-                        loadingSection.innerHTML = `
-                            <div class="spinner"></div>
-                            <p>Connection issue, retrying in ${waitTime/1000} seconds... (Attempt ${retryCount + 1}/${maxRetries})</p>
-                        `;
-                        await new Promise(resolve => setTimeout(resolve, waitTime));
-                    } else {
-                        throw fetchError;
                     }
                 }
-            }
 
-            if (!response.ok) {
-                throw new Error(`Request failed: ${response.status}`);
-            }
+                if (!response.ok) {
+                    throw new Error(`Request failed: ${response.status}`);
+                }
 
-            const data = await response.json();
-            
-            if (!data.content || !data.content[0] || !data.content[0].text) {
-                throw new Error('Invalid response format from API');
-            }
-            
-            const analysisText = data.content[0].text;
-            
-            // Try to parse JSON from the response
-            let analysis;
-            try {
-                // Extract JSON from the response (in case there's other text)
-                const jsonMatch = analysisText.match(/\{[\s\S]*\}/);
-                analysis = JSON.parse(jsonMatch ? jsonMatch[0] : analysisText);
-            } catch (e) {
-                // Fallback if JSON parsing fails
-                analysis = parseTextResponse(analysisText);
-            }
-            
-            displayResults(analysis);
-            
-        } catch (error) {
-            console.error('Error analyzing conversation:', error);
-            loadingSection.innerHTML = `
-                <div style="color: #e74c3c; text-align: center;">
-                    <h3>Analysis Error</h3>
-                    <p>Sorry, there was an error analyzing your conversation.</p>
-                    <p style="font-size: 0.9em; color: #666;">${error.message}</p>
-                    <button class="reset-btn" onclick="resetToUpload()">Try Again</button>
-                </div>
-            `;
-        }
-    }
-    
-    function fileToBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const base64 = reader.result.split(',')[1];
-                resolve(base64);
-            };
-            reader.onerror = () => reject(new Error('Failed to read file'));
-            reader.readAsDataURL(file);
-        });
-    }
-    
-    function parseTextResponse(text) {
-        // Fallback parser for non-JSON responses
-        return {
-            conversation_summary: "Analysis completed",
-            lead_temperature: "Warm",
-            recommended_action: "Text",
-            primary_recommendation: {
-                type: "Text Message",
-                script: text.substring(0, 200) + "...",
-                timing: "Within 24 hours"
-            },
-            alternative_options: [],
-            key_insights: ["See full analysis above"],
-            next_steps: "Follow the recommendations provided"
-        };
-    }
-    
-    function displayResults(analysis) {
-        currentAnalysis = analysis; // Store for refinement
-        loadingSection.style.display = 'none';
-        resultsSection.style.display = 'block';
-        
-        const resultsHTML = `
-            <div class="analysis-card">
-                <div class="analysis-title">📊 Conversation Analysis</div>
-                <p><strong>Summary:</strong> ${analysis.conversation_summary}</p>
-                <p><strong>Lead Temperature:</strong> <span style="color: ${getTemperatureColor(analysis.lead_temperature)}">${analysis.lead_temperature}</span></p>
-                <p><strong>Recommended Action:</strong> ${analysis.recommended_action}</p>
-            </div>
-            
-            <div class="analysis-card">
-                <div class="analysis-title">🎯 Primary Recommendation</div>
-                <div class="recommendation">
-                    <div class="recommendation-type">${analysis.primary_recommendation.type}</div>
-                    <div class="recommendation-text">${analysis.primary_recommendation.script}</div>
-                    <div style="font-size: 0.9em; color: #666;"><strong>Timing:</strong> ${analysis.primary_recommendation.timing}</div>
-                    <button class="copy-btn" onclick="copyToClipboard('${analysis.primary_recommendation.script.replace(/'/g, "\\'")}')">Copy Script</button>
-                </div>
-            </div>
-            
-            ${analysis.alternative_options && analysis.alternative_options.length > 0 ? `
-            <div class="analysis-card">
-                <div class="analysis-title">🔄 Alternative Options</div>
-                ${analysis.alternative_options.map(option => `
-                    <div class="recommendation">
-                        <div class="recommendation-type">${option.type}</div>
-                        <div class="recommendation-text">${option.script}</div>
-                        <div style="font-size: 0.9em; color: #666;"><strong>When to use:</strong> ${option.when_to_use}</div>
-                        <button class="copy-btn" onclick="copyToClipboard('${option.script.replace(/'/g, "\\'")}')">Copy Script</button>
+                const data = await response.json();
+                
+                if (!data.content || !data.content[0] || !data.content[0].text) {
+                    throw new Error('Invalid response format from API');
+                }
+                
+                const analysisText = data.content[0].text;
+                
+                // Try to parse JSON from the response
+                let analysis;
+                try {
+                    // Extract JSON from the response (in case there's other text)
+                    const jsonMatch = analysisText.match(/\{[\s\S]*\}/);
+                    analysis = JSON.parse(jsonMatch ? jsonMatch[0] : analysisText);
+                } catch (e) {
+                    // Fallback if JSON parsing fails
+                    analysis = parseTextResponse(analysisText);
+                }
+                
+                displayResults(analysis);
+                
+            } catch (error) {
+                console.error('Error analyzing conversation:', error);
+                loadingSection.innerHTML = `
+                    <div style="color: #e74c3c; text-align: center;">
+                        <h3>Analysis Error</h3>
+                        <p>Sorry, there was an error analyzing your conversation.</p>
+                        <p style="font-size: 0.9em; color: #666;">${error.message}</p>
+                        <button class="reset-btn" onclick="resetToUpload()">Try Again</button>
                     </div>
-                `).join('')}
-            </div>
-            ` : ''}
+                `;
+            }
+        }
+        
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const base64 = reader.result.split(',')[1];
+                    resolve(base64);
+                };
+                reader.onerror = () => reject(new Error('Failed to read file'));
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        function parseTextResponse(text) {
+            // Fallback parser for non-JSON responses
+            return {
+                conversation_summary: "Analysis completed",
+                lead_temperature: "Warm",
+                recommended_action: "Text",
+                primary_recommendation: {
+                    type: "Text Message",
+                    script: text.substring(0, 200) + "...",
+                    timing: "Within 24 hours"
+                },
+                alternative_options: [],
+                key_insights: ["See full analysis above"],
+                next_steps: "Follow the recommendations provided"
+            };
+        }
+        
+        function displayResults(analysis) {
+            currentAnalysis = analysis; // Store for refinement
+            loadingSection.style.display = 'none';
+            resultsSection.style.display = 'block';
             
-            <div class="analysis-card">
-                <div class="analysis-title">💡 Key Insights</div>
-                ${analysis.key_insights.map(insight => `<p>• ${insight}</p>`).join('')}
-            </div>
-            
-            <div class="analysis-card">
-                <div class="analysis-title">⏭️ Next Steps</div>
-                <p>${analysis.next_steps}</p>
-            </div>
-            
-            <div class="analysis-card">
-                <div class="analysis-title">🎯 Refine This Recommendation</div>
-                <div style="margin-bottom: 15px;">
-                    <textarea id="feedbackInput" placeholder="Want to adjust this recommendation? Type your feedback here...
-```
+            const resultsHTML = `
+                <div class="analysis-card">
+                    <div class="analysis-title">📊 Conversation Analysis</div>
+                    <p><strong>Summary:</strong> ${analysis.conversation_summary}</p>
+                    <p><strong>Lead Temperature:</strong> <span style="color: ${getTemperatureColor(analysis.lead_temperature)}">${analysis.lead_temperature}</span></p>
+                    <p><strong>Recommended Action:</strong> ${analysis.recommended_action}</p>
+                </div>
+                
+                <div class="analysis-card">
+                    <div class="analysis-title">🎯 Primary Recommendation</div>
+                    <div class="recommendation">
+                        <div class="recommendation-type">${analysis.primary_recommendation.type}</div>
+                        <div class="recommendation-text">${analysis.primary_recommendation.script}</div>
+                        <div style="font-size: 0.9em; color: #666;"><strong>Timing:</strong> ${analysis.primary_recommendation.timing}</div>
+                        <button class="copy-btn" onclick="copyToClipboard('${analysis.primary_recommendation.script.replace(/'/g, "\\'")}')">Copy Script</button>
+                    </div>
+                </div>
+                
+                ${analysis.alternative_options && analysis.alternative_options.length > 0 ? `
+                <div class="analysis-card">
+                    <div class="analysis-title">🔄 Alternative Options</div>
+                    ${analysis.alternative_options.map(option => `
+                        <div class="recommendation">
+                            <div class="recommendation-type">${option.type}</div>
+                            <div class="recommendation-text">${option.script}</div>
+                            <div style="font-size: 0.9em; color: #666;"><strong>When to use:</strong> ${option.when_to_use}</div>
+                            <button class="copy-btn" onclick="copyToClipboard('${option.script.replace(/'/g, "\\'")}')">Copy Script</button>
+                        </div>
+                    `).join('')}
+                </div>
+                ` : ''}
+                
+                <div class="analysis-card">
+                    <div class="analysis-title">💡 Key Insights</div>
+                    ${analysis.key_insights.map(insight => `<p>• ${insight}</p>`).join('')}
+                </div>
+                
+                <div class="analysis-card">
+                    <div class="analysis-title">⏭️ Next Steps</div>
+                    <p>${analysis.next_steps}</p>
+                </div>
+                
+                <div class="analysis-card">
+                    <div class="analysis-title">🎯 Refine This Recommendation</div>
+                    <div style="margin-bottom: 15px;">
+                        <textarea id="feedbackInput" placeholder="Want to adjust this recommendation? Type your feedback here...
 
 Examples:
 • Make it more casual
 • Focus on scheduling a call  
 • 6+ months means back off - ask about periodic check-ins
-• Be more direct about pre-approval” style=“width: 100%; height: 100px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; resize: vertical;”></textarea>
-</div>
-<button class="analyze-btn" id="refineBtn" onclick="refineRecommendation()" style="margin-top: 0;">
-Refine Recommendation
-</button>
-</div>
-`;
-
-```
-        document.getElementById('analysisResults').innerHTML = resultsHTML;
-    }
-    
-    function getTemperatureColor(temp) {
-        switch(temp.toLowerCase()) {
-            case 'hot': return '#e74c3c';
-            case 'warm': return '#f39c12';
-            case 'cold': return '#3498db';
-            default: return '#666';
-        }
-    }
-    
-    function copyToClipboard(text) {
-        navigator.clipboard.writeText(text).then(() => {
-            // Show feedback
-            event.target.textContent = 'Copied!';
-            setTimeout(() => {
-                event.target.textContent = 'Copy Script';
-            }, 2000);
-        });
-    }
-    
-    async function refineRecommendation() {
-        const feedback = document.getElementById('feedbackInput').value.trim();
-        if (!feedback) {
-            alert('Please enter some feedback first');
-            return;
+• Be more direct about pre-approval" style="width: 100%; height: 100px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; resize: vertical;"></textarea>
+                    </div>
+                    <button class="analyze-btn" id="refineBtn" onclick="refineRecommendation()" style="margin-top: 0;">
+                        Refine Recommendation
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('analysisResults').innerHTML = resultsHTML;
         }
         
-        const refineBtn = document.getElementById('refineBtn');
-        refineBtn.disabled = true;
-        refineBtn.textContent = 'Refining...';
-        
-        try {
-            const response = await fetch("/.netlify/functions/refine", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    originalAnalysis: currentAnalysis,
-                    feedback: feedback
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error(`Request failed: ${response.status}`);
+        function getTemperatureColor(temp) {
+            switch(temp.toLowerCase()) {
+                case 'hot': return '#e74c3c';
+                case 'warm': return '#f39c12';
+                case 'cold': return '#3498db';
+                default: return '#666';
             }
-
-            const data = await response.json();
-            const refinedAnalysis = JSON.parse(data.content[0].text.match(/\{[\s\S]*\}/)[0]);
-            
-            // Update the display with refined results
-            displayResults(refinedAnalysis);
-            
-            // Clear the feedback input
-            document.getElementById('feedbackInput').value = '';
-            
-        } catch (error) {
-            console.error('Error refining recommendation:', error);
-            alert('Sorry, there was an error refining the recommendation. Please try again.');
-        } finally {
-            refineBtn.disabled = false;
-            refineBtn.textContent = 'Refine Recommendation';
         }
-    }
-    
-    function resetToUpload() {
-        uploadSection.style.display = 'block';
-        previewSection.style.display = 'none';
-        loadingSection.style.display = 'none';
-        resultsSection.style.display = 'none';
-        selectedFile = null;
-        fileInput.value = '';
-    }
-    
-    resetBtn.addEventListener('click', resetToUpload);
-    resetBtn2.addEventListener('click', resetToUpload);
-</script>
-```
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Show feedback
+                event.target.textContent = 'Copied!';
+                setTimeout(() => {
+                    event.target.textContent = 'Copy Script';
+                }, 2000);
+            });
+        }
+        
+        async function refineRecommendation() {
+            const feedback = document.getElementById('feedbackInput').value.trim();
+            if (!feedback) {
+                alert('Please enter some feedback first');
+                return;
+            }
+            
+            const refineBtn = document.getElementById('refineBtn');
+            refineBtn.disabled = true;
+            refineBtn.textContent = 'Refining...';
+            
+            try {
+                const response = await fetch("/.netlify/functions/refine", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        originalAnalysis: currentAnalysis,
+                        feedback: feedback
+                    })
+                });
 
+                if (!response.ok) {
+                    throw new Error(`Request failed: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const refinedAnalysis = JSON.parse(data.content[0].text.match(/\{[\s\S]*\}/)[0]);
+                
+                // Update the display with refined results
+                displayResults(refinedAnalysis);
+                
+                // Clear the feedback input
+                document.getElementById('feedbackInput').value = '';
+                
+            } catch (error) {
+                console.error('Error refining recommendation:', error);
+                alert('Sorry, there was an error refining the recommendation. Please try again.');
+            } finally {
+                refineBtn.disabled = false;
+                refineBtn.textContent = 'Refine Recommendation';
+            }
+        }
+        
+        function resetToUpload() {
+            uploadSection.style.display = 'block';
+            previewSection.style.display = 'none';
+            loadingSection.style.display = 'none';
+            resultsSection.style.display = 'none';
+            selectedFile = null;
+            fileInput.value = '';
+        }
+        
+        resetBtn.addEventListener('click', resetToUpload);
+        resetBtn2.addEventListener('click', resetToUpload);
+    </script>
 </body>
 </html>
