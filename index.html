@@ -13,7 +13,7 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -28,21 +28,31 @@
         }
         
         .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
             color: white;
             padding: 30px;
             text-align: center;
+            position: relative;
+        }
+        
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            height: 40px;
         }
         
         .header h1 {
             font-size: 2.2em;
             margin-bottom: 10px;
             font-weight: 700;
+            margin-left: 60px;
         }
         
         .header p {
             font-size: 1.1em;
             opacity: 0.9;
+            margin-left: 60px;
         }
         
         .upload-section {
@@ -52,10 +62,10 @@
         }
         
         .upload-area {
-            border: 3px dashed #667eea;
+            border: 3px dashed #4fd1c7;
             border-radius: 15px;
             padding: 40px;
-            background: #f8f9ff;
+            background: #f0fdfc;
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
@@ -63,20 +73,20 @@
         }
         
         .upload-area:hover {
-            border-color: #764ba2;
-            background: #f0f1ff;
+            border-color: #38b2ac;
+            background: #e6fffa;
             transform: translateY(-2px);
         }
         
         .upload-area.dragover {
-            border-color: #764ba2;
-            background: #e8eaff;
+            border-color: #38b2ac;
+            background: #e6fffa;
             transform: scale(1.02);
         }
         
         .upload-icon {
             font-size: 3em;
-            color: #667eea;
+            color: #4fd1c7;
             margin-bottom: 15px;
         }
         
@@ -108,7 +118,7 @@
         }
         
         .analyze-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4fd1c7 0%, #38b2ac 100%);
             color: white;
             border: none;
             padding: 15px 30px;
@@ -123,7 +133,7 @@
         
         .analyze-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 5px 15px rgba(79, 209, 199, 0.3);
         }
         
         .analyze-btn:disabled {
@@ -144,7 +154,7 @@
             padding: 25px;
             margin-bottom: 20px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-            border-left: 5px solid #667eea;
+            border-left: 5px solid #4fd1c7;
         }
         
         .analysis-title {
@@ -181,12 +191,12 @@
             border-radius: 8px;
             padding: 15px;
             font-family: 'Courier New', monospace;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #4fd1c7;
             margin-top: 10px;
         }
         
         .copy-btn {
-            background: #667eea;
+            background: #4fd1c7;
             color: white;
             border: none;
             padding: 8px 15px;
@@ -198,18 +208,18 @@
         }
         
         .copy-btn:hover {
-            background: #5a6fd8;
+            background: #38b2ac;
         }
         
         .loading {
             text-align: center;
             padding: 30px;
-            color: #667eea;
+            color: #4fd1c7;
         }
         
         .spinner {
             border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
+            border-top: 3px solid #4fd1c7;
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -241,7 +251,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>📱 Lead Follow-up Analyzer</h1>
+            <img src="https://storage.googleapis.com/msgsndr/pu8w6RnWTzseSsdMoPnG/media/688301cd3303847fd4ad40bb.png" alt="Ohana Mortgage" class="logo">
+            <h1>Lead Follow-up Analyzer</h1>
             <p>Upload a screenshot of your text conversation to get personalized follow-up recommendations</p>
         </div>
         
@@ -283,6 +294,7 @@
         const resetBtn = document.getElementById('resetBtn');
         const resetBtn2 = document.getElementById('resetBtn2');
         
+        let currentAnalysis = null;
         let selectedFile = null;
 
         // File upload handlers
@@ -483,6 +495,7 @@
         }
         
         function displayResults(analysis) {
+            currentAnalysis = analysis; // Store for refinement
             loadingSection.style.display = 'none';
             resultsSection.style.display = 'block';
             
@@ -527,6 +540,22 @@
                     <div class="analysis-title">⏭️ Next Steps</div>
                     <p>${analysis.next_steps}</p>
                 </div>
+                
+                <div class="analysis-card">
+                    <div class="analysis-title">🎯 Refine This Recommendation</div>
+                    <div style="margin-bottom: 15px;">
+                        <textarea id="feedbackInput" placeholder="Want to adjust this recommendation? Type your feedback here...
+
+Examples:
+• Make it more casual
+• Focus on scheduling a call  
+• 6+ months means back off - ask about periodic check-ins
+• Be more direct about pre-approval" style="width: 100%; height: 100px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; resize: vertical;"></textarea>
+                    </div>
+                    <button class="analyze-btn" id="refineBtn" onclick="refineRecommendation()" style="margin-top: 0;">
+                        Refine Recommendation
+                    </button>
+                </div>
             `;
             
             document.getElementById('analysisResults').innerHTML = resultsHTML;
@@ -549,6 +578,51 @@
                     event.target.textContent = 'Copy Script';
                 }, 2000);
             });
+        }
+        
+        async function refineRecommendation() {
+            const feedback = document.getElementById('feedbackInput').value.trim();
+            if (!feedback) {
+                alert('Please enter some feedback first');
+                return;
+            }
+            
+            const refineBtn = document.getElementById('refineBtn');
+            refineBtn.disabled = true;
+            refineBtn.textContent = 'Refining...';
+            
+            try {
+                const response = await fetch("/.netlify/functions/refine", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        originalAnalysis: currentAnalysis,
+                        feedback: feedback
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Request failed: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const refinedAnalysis = JSON.parse(data.content[0].text.match(/\{[\s\S]*\}/)[0]);
+                
+                // Update the display with refined results
+                displayResults(refinedAnalysis);
+                
+                // Clear the feedback input
+                document.getElementById('feedbackInput').value = '';
+                
+            } catch (error) {
+                console.error('Error refining recommendation:', error);
+                alert('Sorry, there was an error refining the recommendation. Please try again.');
+            } finally {
+                refineBtn.disabled = false;
+                refineBtn.textContent = 'Refine Recommendation';
+            }
         }
         
         function resetToUpload() {
