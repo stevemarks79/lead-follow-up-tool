@@ -40,7 +40,7 @@ exports.handler = async (event, context) => {
         "anthropic-version": "2023-06-01"
       },
       body: JSON.stringify({
-        model: "claude-3-sonnet-20240229",
+        model: "claude-sonnet-4-20250514",
         max_tokens: 1500,
         messages: [
           {
@@ -58,12 +58,18 @@ exports.handler = async (event, context) => {
                 type: "text",
                 text: `As a mortgage broker in Hawaii specializing in "hero homeowners" (veterans, first responders, education, healthcare workers), analyze this text conversation screenshot and provide specific follow-up recommendations.
 
-TODAY'S DATE: July 24, 2025
+TODAY'S DATE: ${new Date().toLocaleDateString('en-US', { 
+  weekday: 'long', 
+  year: 'numeric', 
+  month: 'long', 
+  day: 'numeric',
+  timeZone: 'Pacific/Honolulu'
+})}
 
 CRITICAL ANALYSIS POINTS:
 - Look at LEAD CREATION DATE in Contact Notes (right side)
 - Look at MESSAGE TIMESTAMPS to understand response timing
-- Calculate days since last interaction using today's date (July 24, 2025)
+- Calculate days since last interaction using today's date
 - Distinguish between "went cold" vs "stated future timeline" 
 - Don't confuse system updates with customer actions
 - If it's been several days since their last text, acknowledge the delay appropriately
