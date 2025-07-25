@@ -26,13 +26,21 @@ exports.handler = async (event, context) => {
   try {
     const { image, mediaType } = JSON.parse(event.body);
 
+    // Get API key from environment variable
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    if (!apiKey) {
+      throw new Error('API key not configured');
+    }
+
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-api-key": apiKey,  // Add the API key header
+        "anthropic-version": "2023-06-01"
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
+        model: "claude-3-sonnet-20240229",
         max_tokens: 1500,
         messages: [
           {
