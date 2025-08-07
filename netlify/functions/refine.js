@@ -59,19 +59,9 @@ Refine the JSON per the system rules. Return ONLY the JSON.
         temperature: 0.3,
         max_output_tokens: 1200,
         input: [
-  { role: "system", content: [{ type: "input_text", text: system }] },
-  {
-    role: "user",
-    content: [
-      { type: "input_text", text: userPrompt },
-      {
-        type: "input_image",
-        image_url: { url: `data:${mediaType};base64,${image}` }
-      }
-    ]
-  }
-]
-
+          { role: "system", content: [{ type: "input_text", text: system }] },
+          { role: "user", content: [{ type: "input_text", text: userPrompt }] }
+        ]
       })
     });
 
