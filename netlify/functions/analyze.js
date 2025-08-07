@@ -1,134 +1,136 @@
-exports.handler = async (event, context) => {
-  // Handle CORS
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS'
-  };
-
-  // Handle preflight OPTIONS request
-  if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 200,
-      headers,
-      body: ''
-    };
+// netlify/functions/analyze.js
+exports.handler = async (event) => {
+  // CORS + method guard
+  if (event.httpMethod === "OPTIONS") {
+    return { statusCode: 200, headers: cors(), body: "" };
   }
-
-  if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      headers,
-      body: JSON.stringify({ error: 'Method not allowed' })
-    };
+  if (event.httpMethod !== "POST") {
+    return { statusCode: 405, headers: cors(), body: "Method Not Allowed" };
   }
 
   try {
-    const { image, mediaType } = JSON.parse(event.body);
-
-    // Get API key from environment variable
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-    if (!apiKey) {
-      throw new Error('API key not configured');
+    const { image, mediaType } = JSON.parse(event.body || "{}");
+    if (!image || !mediaType) {
+      return { statusCode: 400, headers: cors(), body: JSON.stringify({ error: "image and mediaType required" }) };
     }
 
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      return { statusCode: 500, headers: cors(), body: JSON.stringify({ error: "OPENAI_API_KEY not configured" }) };
+    }
+
+    // Honolulu time for “today”
+    const hawaiiNow = new Date().toLocaleString("en-US", { timeZone: "Pacific/Honolulu" });
+
+    const system = `
+You are helping Steve (ʻOhana Mortgage Solutions, Kapolei, HI) craft SMS follow-ups for leads he has NOT spoken to yet.
+
+GOALS
+- Build trust via short, easy, friendly questions that invite back-and-forth.
+- Do NOT push a call or calendar until AFTER at least 2–3 exchanges unless the lead explicitly asks.
+- Sound like Steve: warm, plain-spoken, friendly Hawaiʻi-local vibe; no corporate speak; concise; no emojis.
+
+CONSTRAINTS
+- First message = one clear, low-friction question (timeline, island/area, rent vs buy, monthly comfort, etc.).
+- Keep EACH text <= 160 characters and end with a simple question.
+- Avoid rates/jargon unless the lead brought it up.
+- Provide a gentle “nudge” variant if the thread looks stalled.
+- Use today's date (Honolulu): ${hawaiiNow} for timing recs.
+
+OUTPUT
+Return strict JSON only, no extra prose:
+{
+  "conversation_summary": "…",
+  "lead_temperature": "Hot|Warm|Cold",
+  "recommended_action": "Text",
+  "primary_recommendation": {
+    "type": "Text Message",
+    "script": "First message to send (<=160 chars, ends with a question).",
+    "timing": "e.g., Within 2 hours"
+  },
+  "conversation_sequence": [
+    "Follow-up Q #1 (<=160 chars).",
+    "Follow-up Q #2 (<=160 chars).",
+    "Follow-up Q #3 (<=160 chars; may softly offer value, not a call)."
+  ],
+  "alternative_options": [
+    {
+      "type": "Nudge (if no reply in 48–72h)",
+      "script": "Polite check-in (<=160 chars, ends with a question).",
+      "when_to_use": "No response after 2 days"
+    }
+  ],
+  "key_insights": [
+    "One-liners about intent/objections/tone cues from the screenshot"
+  ],
+  "next_steps": "Plain guidance. Only mention booking after 2–3 replies or if they ask."
+}
+STYLE
+- Use Steve’s voice. Examples:
+  - "Hey, saw your message—what’s your timeline looking like?"
+  - "Are you thinking Oʻahu or another island?"
+  - "What payment range would feel comfortable each month?"
+- If the lead explicitly asks to call/book, permit a single-line invite with Steve’s link: https://calendly.com/ohana-mortgage/15min
+VALIDATE JSON. If image text is unclear, note uncertainty in key_insights but still produce scripts.
+`.trim();
+
+    const userPrompt = `
+Analyze the attached screenshot of a text conversation between Steve and a lead.
+Identify: lead creation recency, last touch, intent signals, objections, tone.
+Then produce the strict JSON described above.
+`.trim();
+
+    // OpenAI Responses API call
+    const response = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "x-api-key": apiKey,  // Add the API key header
-        "anthropic-version": "2023-06-01"
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1500,
-        messages: [
+        model: "gpt-5",
+        temperature: 0.4,
+        max_output_tokens: 1500,
+        input: [
+          { role: "system", content: [{ type: "text", text: system }] },
           {
             role: "user",
             content: [
-              {
-                type: "image",
-                source: {
-                  type: "base64",
-                  media_type: mediaType,
-                  data: image
-                }
-              },
-              {
-                type: "text",
-                text: `As a mortgage broker in Hawaii specializing in "hero homeowners" (veterans, first responders, education, healthcare workers), analyze this text conversation screenshot and provide specific follow-up recommendations.
-
-TODAY'S DATE: ${new Date().toLocaleDateString('en-US', { 
-  weekday: 'long', 
-  year: 'numeric', 
-  month: 'long', 
-  day: 'numeric',
-  timeZone: 'Pacific/Honolulu'
-})}
-
-CRITICAL ANALYSIS POINTS:
-- Look at LEAD CREATION DATE in Contact Notes (right side)
-- Look at MESSAGE TIMESTAMPS to understand response timing
-- Calculate days since last interaction using today's date
-- Distinguish between "went cold" vs "stated future timeline" 
-- Don't confuse system updates with customer actions
-- If it's been several days since their last text, acknowledge the delay appropriately
-
-IMPORTANT STYLE GUIDELINES:
-- Keep texts SHORT (1-2 sentences max, paragraph breaks if longer)
-- Use "Hi" for first contact, "Hey" for return contacts
-- Mirror their greeting style if they used one
-- Be conversational but professional - like Steve from Ohana Mortgage
-- Include calendar link when suggesting calls: https://link.ohanamortgage.com/widget/bookings/ohana-initial-call
-- Be direct and helpful, not pushy
-- Use contractions naturally
-- No big blocks of text
-- If responding days later, acknowledge timing naturally ("Sorry for the delay" or similar)
-
-Please respond with a JSON object containing:
-{
-  "conversation_summary": "Brief summary including key dates and timeline context",
-  "lead_temperature": "Hot/Warm/Cold", 
-  "days_since_last_contact": "Number of days since their last message",
-  "timing_context": "How the delay affects approach",
-  "recommended_action": "Text/Call/Email/Wait",
-  "primary_recommendation": {
-    "type": "Text Message/Phone Call/Email",
-    "script": "Exact text to send or what to say (keep SHORT, acknowledge timing if needed)",
-    "timing": "When to send this"
-  },
-  "alternative_options": [
-    {
-      "type": "option type", 
-      "script": "alternative script (keep SHORT)",
-      "when_to_use": "specific scenario"
-    }
-  ],
-  "key_insights": ["insight1", "insight2"],
-  "next_steps": "What to do after this contact"
-}
-
-Focus on converting to a phone call or pre-approval application. Write texts exactly like Steve would - conversational, helpful, and brief. Pay close attention to dates and timing context.`
-              }
+              { type: "input_text", text: userPrompt },
+              { type: "input_image", image_data: image, mime_type: mediaType }
             ]
           }
         ]
       })
     });
 
-    const data = await response.json();
+    if (response.status === 429) {
+      // Let your front-end retry/backoff
+      return { statusCode: 529, headers: cors(), body: JSON.stringify({ error: "Model busy" }) };
+    }
 
+    if (!response.ok) {
+      const errText = await response.text();
+      return { statusCode: 500, headers: cors(), body: JSON.stringify({ error: "OpenAI error", detail: errText }) };
+    }
+
+    const data = await response.json();
+    // Responses API provides output_text convenience; keep your front-end contract:
+    const outputText = data.output_text || (Array.isArray(data.output) ? data.output.map(x => x.content?.[0]?.text || "").join("\n") : "");
     return {
       statusCode: 200,
-      headers,
-      body: JSON.stringify(data)
+      headers: cors(),
+      body: JSON.stringify({ content: [{ type: "text", text: outputText }] })
     };
-
-  } catch (error) {
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ error: error.message })
-    };
+  } catch (e) {
+    return { statusCode: 500, headers: cors(), body: JSON.stringify({ error: e.message }) };
   }
 };
+
+function cors() {
+  return {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Allow-Methods": "POST, OPTIONS"
+  };
+}
