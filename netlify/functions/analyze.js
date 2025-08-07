@@ -92,15 +92,18 @@ Then produce the strict JSON described above.
         temperature: 0.4,
         max_output_tokens: 1500,
         input: [
-          { role: "system", content: [{ type: "text", text: system }] },
-          {
-            role: "user",
-            content: [
-              { type: "input_text", text: userPrompt },
-              { type: "input_image", image_data: image, mime_type: mediaType }
-            ]
-          }
-        ]
+  { role: "system", content: [{ type: "input_text", text: system }] },
+  {
+    role: "user",
+    content: [
+      { type: "input_text", text: userPrompt },
+      {
+        type: "input_image",
+        image_url: { url: `data:${mediaType};base64,${image}` }
+      }
+    ]
+  }
+]
       })
     });
 
