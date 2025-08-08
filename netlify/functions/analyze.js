@@ -1,22 +1,14 @@
 // netlify/functions/analyze.js
 exports.handler = async (event) => {
-  if (event.httpMethod === "OPTIONS") {
-    return ok("");
-  }
-  if (event.httpMethod !== "POST") {
-    return fail(405, "Method Not Allowed");
-  }
+  if (event.httpMethod === "OPTIONS") return ok("");
+  if (event.httpMethod !== "POST") return fail(405, "Method Not Allowed");
 
   try {
     const { image, mediaType } = JSON.parse(event.body || "{}");
-    if (!image || !mediaType) {
-      return fail(400, "image and mediaType required");
-    }
+    if (!image || !mediaType) return fail(400, "image and mediaType required");
 
     const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) {
-      return fail(500, "OPENAI_API_KEY not configured");
-    }
+    if (!apiKey) return fail(500, "OPENAI_API_KEY not configured");
 
     const hawaiiNow = new Date().toLocaleString("en-US", { timeZone: "Pacific/Honolulu" });
 
@@ -78,50 +70,55 @@ Identify: lead creation recency, last touch, intent signals, objections, tone.
 Then produce the strict JSON described above.
 `.trim();
 
-    const response = await fetch("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "gpt-5",
-        max_output_tokens: 1500,
-        input: [
-          { role: "system", content: [{ type: "input_text", text: system }] },
-          {
-            role: "user",
-            content: [
-              { type: "input_text", text: userPrompt },
-              {
-                type: "input_image",
-                image_url: `data:${mediaType};base64,${image}`
-              }
-            ]
-          }
-        ]
-      })
-    });
-
-    if (response.status === 429) {
-      return json(529, { error: "Model busy" });
+    // Try GPT-5, fallback to GPT-5-mini
+    let outputText;
+    try {
+      outputText = await callOpenAI(apiKey, "gpt-5", system, userPrompt, mediaType, image);
+    } catch (err) {
+      console.error("GPT-5 call failed, retrying with gpt-5-mini:", err.message || err);
+      outputText = await callOpenAI(apiKey, "gpt-5-mini", system, userPrompt, mediaType, image);
     }
-
-    const raw = await response.text();
-    if (!response.ok) {
-      return json(500, { error: "OpenAI error", detail: raw });
-    }
-
-    const data = JSON.parse(raw);
-    const outputText =
-      data.output_text ??
-      (Array.isArray(data.output) ? data.output.map(x => x.content?.[0]?.text || "").join("\n") : "");
 
     return json(200, { content: [{ type: "text", text: outputText }] });
   } catch (e) {
     return json(500, { error: e.message });
   }
 };
+
+async function callOpenAI(apiKey, model, system, userPrompt, mediaType, image) {
+  const res = await fetch("https://api.openai.com/v1/responses", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model,
+      max_output_tokens: 1500,
+      input: [
+        { role: "system", content: [{ type: "input_text", text: system }] },
+        {
+          role: "user",
+          content: [
+            { type: "input_text", text: userPrompt },
+            { type: "input_image", image_url: `data:${mediaType};base64,${image}` }
+          ]
+        }
+      ]
+    })
+  });
+
+  const raw = await res.text();
+  if (!res.ok) throw new Error(`OpenAI error (${model}): ${raw}`);
+
+  const data = JSON.parse(raw);
+  return (
+    data.output_text ??
+    (Array.isArray(data.output)
+      ? data.output.map(x => x.content?.[0]?.text || "").join("\n")
+      : "")
+  );
+}
 
 function cors() {
   return {
