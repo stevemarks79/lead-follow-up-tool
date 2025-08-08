@@ -99,7 +99,7 @@ Then produce the strict JSON described above.
       { type: "input_text", text: userPrompt },
       {
         type: "input_image",
-        image_url: { url: `data:${mediaType};base64,${image}` }
+        image_url: `data:${mediaType};base64,${image}` }
       }
     ]
   }
