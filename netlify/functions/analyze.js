@@ -86,7 +86,6 @@ Then produce the strict JSON described above.
       },
       body: JSON.stringify({
         model: "gpt-5",
-        temperature: 0.4,
         max_output_tokens: 1500,
         input: [
           { role: "system", content: [{ type: "input_text", text: system }] },
