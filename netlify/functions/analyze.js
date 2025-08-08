@@ -1,25 +1,23 @@
 // netlify/functions/analyze.js
 exports.handler = async (event) => {
-  // CORS + method guard
   if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 200, headers: cors(), body: "" };
+    return ok("");
   }
   if (event.httpMethod !== "POST") {
-    return { statusCode: 405, headers: cors(), body: "Method Not Allowed" };
+    return fail(405, "Method Not Allowed");
   }
 
   try {
     const { image, mediaType } = JSON.parse(event.body || "{}");
     if (!image || !mediaType) {
-      return { statusCode: 400, headers: cors(), body: JSON.stringify({ error: "image and mediaType required" }) };
+      return fail(400, "image and mediaType required");
     }
 
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
-      return { statusCode: 500, headers: cors(), body: JSON.stringify({ error: "OPENAI_API_KEY not configured" }) };
+      return fail(500, "OPENAI_API_KEY not configured");
     }
 
-    // Honolulu time for “today”
     const hawaiiNow = new Date().toLocaleString("en-US", { timeZone: "Pacific/Honolulu" });
 
     const system = `
@@ -34,7 +32,7 @@ CONSTRAINTS
 - First message = one clear, low-friction question (timeline, island/area, rent vs buy, monthly comfort, etc.).
 - Keep EACH text <= 160 characters and end with a simple question.
 - Avoid rates/jargon unless the lead brought it up.
-- Provide a gentle “nudge” variant if the thread looks stalled.
+- Provide a gentle “nudge” if the thread looks stalled.
 - Use today's date (Honolulu): ${hawaiiNow} for timing recs.
 
 OUTPUT
@@ -80,7 +78,6 @@ Identify: lead creation recency, last touch, intent signals, objections, tone.
 Then produce the strict JSON described above.
 `.trim();
 
-    // OpenAI Responses API call
     const response = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: {
@@ -92,41 +89,38 @@ Then produce the strict JSON described above.
         temperature: 0.4,
         max_output_tokens: 1500,
         input: [
-  { role: "system", content: [{ type: "input_text", text: system }] },
-  {
-    role: "user",
-    content: [
-      { type: "input_text", text: userPrompt },
-      {
-        type: "input_image",
-        image_url: `data:${mediaType};base64,${image}` }
-      }
-    ]
-  }
-]
+          { role: "system", content: [{ type: "input_text", text: system }] },
+          {
+            role: "user",
+            content: [
+              { type: "input_text", text: userPrompt },
+              {
+                type: "input_image",
+                image_url: `data:${mediaType};base64,${image}`
+              }
+            ]
+          }
+        ]
       })
     });
 
     if (response.status === 429) {
-      // Let your front-end retry/backoff
-      return { statusCode: 529, headers: cors(), body: JSON.stringify({ error: "Model busy" }) };
+      return json(529, { error: "Model busy" });
     }
 
+    const raw = await response.text();
     if (!response.ok) {
-      const errText = await response.text();
-      return { statusCode: 500, headers: cors(), body: JSON.stringify({ error: "OpenAI error", detail: errText }) };
+      return json(500, { error: "OpenAI error", detail: raw });
     }
 
-    const data = await response.json();
-    // Responses API provides output_text convenience; keep your front-end contract:
-    const outputText = data.output_text || (Array.isArray(data.output) ? data.output.map(x => x.content?.[0]?.text || "").join("\n") : "");
-    return {
-      statusCode: 200,
-      headers: cors(),
-      body: JSON.stringify({ content: [{ type: "text", text: outputText }] })
-    };
+    const data = JSON.parse(raw);
+    const outputText =
+      data.output_text ??
+      (Array.isArray(data.output) ? data.output.map(x => x.content?.[0]?.text || "").join("\n") : "");
+
+    return json(200, { content: [{ type: "text", text: outputText }] });
   } catch (e) {
-    return { statusCode: 500, headers: cors(), body: JSON.stringify({ error: e.message }) };
+    return json(500, { error: e.message });
   }
 };
 
@@ -137,3 +131,6 @@ function cors() {
     "Access-Control-Allow-Methods": "POST, OPTIONS"
   };
 }
+function ok(body) { return { statusCode: 200, headers: cors(), body }; }
+function fail(code, msg) { return { statusCode: code, headers: cors(), body: JSON.stringify({ error: msg }) }; }
+function json(code, obj) { return { statusCode: code, headers: cors(), body: JSON.stringify(obj) }; }
